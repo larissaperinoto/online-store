@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { getCategories } from '../services/api';
 import { Link } from 'react-router-dom';
+import { getCategories, getProductsFromQuery } from '../services/api';
+import CardProducts from '../components/cardProducts';
 
 export default class Home extends Component {
   constructor() {
     super();
     this.state = {
-      data: [],
+      dataProducts: [],
       categories: [],
+      search: '',
     };
   }
 
@@ -22,8 +24,22 @@ export default class Home extends Component {
     });
   };
 
+  handleCLick = async () => {
+    const { search } = this.state;
+    const { results } = await getProductsFromQuery(search);
+    this.setState({ dataProducts: results });
+
+    if (results === undefined) {
+      return (<span>Nenhum produto foi encontrado</span>);
+    }
+  }
+
+  handleChange = ({ target: { value } }) => {
+    this.setState({ search: value });
+  }
+
   render() {
-    const { data, categories } = this.state;
+    const { dataProducts, categories } = this.state;
     return (
       <div>
         <Link to="/cart" data-testid="shopping-cart-button">Carrinho</Link>
@@ -40,9 +56,18 @@ export default class Home extends Component {
           <input
             id="searchProducts"
             type="text"
+            data-testid="query-input"
+            onChange={ (event) => this.handleChange(event) }
           />
         </label>
-        { (data.length > 0) ? '' : (
+        <button
+          data-testid="query-button"
+          type="button"
+          onClick={ this.handleCLick }
+        >
+          Pesquisar
+        </button>
+        { (dataProducts.length > 0) ? '' : (
           <span
             data-testid="home-initial-message"
           >
@@ -50,6 +75,8 @@ export default class Home extends Component {
 
           </span>
         )}
+        { (dataProducts.length > 0) && dataProducts.map((product) => (
+          <CardProducts { ...product } key={ product.id } />)) }
       </div>
     );
   }
