@@ -1,18 +1,40 @@
 import React, { Component } from 'react';
+import { getCategories } from '../services/api';
 
 export default class Home extends Component {
   constructor() {
     super();
     this.state = {
       data: [],
+      categories: [],
     };
   }
 
+  componentDidMount() {
+    this.fetchCategories();
+  }
+
+  fetchCategories = async () => {
+    const categories = await getCategories();
+    this.setState({
+      categories,
+    });
+  };
+
   render() {
-    const { data } = this.state;
+    const { data, categories } = this.state;
     return (
       <div>
-        home
+        {categories.map((category) => (
+          <button
+            key={ category.id }
+            data-testid="category"
+            type="button"
+          >
+            {category.name}
+          </button>
+        ))}
+
         <label htmlFor="searchProducts">
           <input
             id="searchProducts"
