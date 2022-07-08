@@ -29,3 +29,11 @@ export async function getProductsFromCategory(category) {
   const requestJson = await request.json();
   return requestJson;
 }
+
+export async function getProductsFromProductId(productId) {
+  const request = await fetch(
+    `https://api.mercadolibre.com/items/${productId}`,
+  );
+  const requestJson = await request.json();
+  return requestJson;
+}

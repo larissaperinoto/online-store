@@ -3,6 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/home';
 import Cart from './pages/cart';
+import Details from './components/details';
 
 class App extends React.Component {
   constructor() {
@@ -27,6 +28,7 @@ class App extends React.Component {
           render={ () => <Home func={ this.addToCart } /> }
         />
         <Route path="/cart" render={ () => <Cart cart={ cart } /> } />
+        <Route path="/details/:id" component={ Details } />
       </BrowserRouter>
     );
   }
