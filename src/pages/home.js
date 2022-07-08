@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getCategories,
   getProductsFromQuery,
   getProductsFromCategory } from '../services/api';
@@ -47,6 +48,7 @@ export default class Home extends Component {
 
   render() {
     const { dataProducts, categories } = this.state;
+    const { func } = this.props;
     return (
       <div>
         <Link to="/cart" data-testid="shopping-cart-button">Carrinho</Link>
@@ -84,8 +86,22 @@ export default class Home extends Component {
           </span>
         )}
         { (dataProducts.length > 0) && dataProducts.map((product) => (
-          <CardProducts { ...product } key={ product.id } />)) }
+          <div key={ product.id }>
+            <CardProducts { ...product } />
+            <button
+              type="button"
+              data-testid="product-add-to-cart"
+              onClick={ () => func(product) }
+            >
+              Comprar
+            </button>
+          </div>
+        )) }
       </div>
     );
   }
 }
+
+Home.propTypes = {
+  func: PropTypes.func.isRequired,
+};

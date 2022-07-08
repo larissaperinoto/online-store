@@ -5,14 +5,33 @@ import Home from './pages/home';
 import Cart from './pages/cart';
 import Details from './components/details';
 
-function App() {
-  return (
-    <BrowserRouter>
-      <Route exact path="/" component={ Home } />
-      <Route path="/cart" component={ Cart } />
-      <Route path="/details/:id" component={ Details } />
-    </BrowserRouter>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      cart: [],
+    };
+  }
+
+  addToCart = (product) => {
+    const { cart } = this.state;
+    this.setState({ cart: [...cart, product] });
+  }
+
+  render() {
+    const { cart } = this.state;
+    return (
+      <BrowserRouter>
+        <Route
+          exact
+          path="/"
+          render={ () => <Home func={ this.addToCart } /> }
+        />
+        <Route path="/cart" render={ () => <Cart cart={ cart } /> } />
+        <Route path="/details/:id" component={ Details } />
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
