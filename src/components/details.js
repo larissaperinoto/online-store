@@ -17,8 +17,6 @@ getOBjtApi = async () => {
   this.setState({
     getOBjtApi: arrApi,
   });
-  console.log(id);
-  console.log('opa');
 };
 
 render() {
