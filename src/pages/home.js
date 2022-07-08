@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getProductsFromQuery } from '../services/api';
+import { getCategories,
+  getProductsFromQuery,
+  getProductsFromCategory } from '../services/api';
 import CardProducts from '../components/cardProducts';
 
 export default class Home extends Component {
@@ -38,6 +40,11 @@ export default class Home extends Component {
     this.setState({ search: value });
   }
 
+  filterCategory = async (id) => {
+    const { results } = await getProductsFromCategory(id);
+    this.setState({ dataProducts: results });
+  }
+
   render() {
     const { dataProducts, categories } = this.state;
     return (
@@ -48,6 +55,7 @@ export default class Home extends Component {
             key={ category.id }
             data-testid="category"
             type="button"
+            onClick={ () => this.filterCategory(category.id) }
           >
             {category.name}
           </button>
