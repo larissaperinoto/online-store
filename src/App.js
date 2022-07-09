@@ -13,9 +13,9 @@ class App extends React.Component {
     };
   }
 
-  addToCart = (product) => {
+  addToCart = async (product) => {
     const { cart } = this.state;
-    this.setState({ cart: [...cart, product] });
+    await this.setState({ cart: [...cart, product] });
   }
 
   render() {
@@ -28,7 +28,10 @@ class App extends React.Component {
           render={ () => <Home func={ this.addToCart } /> }
         />
         <Route path="/cart" render={ () => <Cart cart={ cart } /> } />
-        <Route path="/details/:id" component={ Details } />
+        <Route
+          path="/details/:id"
+          render={ (props) => <Details { ...props } func={ this.addToCart } /> }
+        />
       </BrowserRouter>
     );
   }
