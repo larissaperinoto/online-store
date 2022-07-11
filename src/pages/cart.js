@@ -2,14 +2,44 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class Cart extends Component {
-  funct = (id) => {
+  constructor() {
+    super();
+
+    this.state = {
+      cart: [],
+      cartRender: [],
+    };
+  }
+
+  componentDidMount() {
     const { cart } = this.props;
+    const cartRender = [...new Set(cart)];
+    this.setState({ cart, cartRender });
+  }
+
+  funct = (id) => {
+    const { cart } = this.state;
     const quantity = cart.filter((product) => product.id === id);
     return quantity.length;
   }
 
+  handleClickIncrease = (product) => {
+    const { cart } = this.state;
+    this.setState({ cart: [...cart, product] });
+  }
+
+  handleClickDecrease = (product) => {
+    const { cart } = this.state;
+    const prodQuantity = cart.filter((obj) => obj === product);
+    if (prodQuantity.length > 1) {
+      const newData = cart.filter((obje) => obje !== product);
+      prodQuantity.pop();
+      this.setState({ cart: [...newData, ...prodQuantity] });
+    }
+  }
+
   render() {
-    const { cart } = this.props;
+    const { cart, cartRender } = this.state;
     return (
       <div>
         {
@@ -21,7 +51,7 @@ export default class Cart extends Component {
             </span>)
         }
         {
-          cart.map((product, index) => (
+          cartRender.map((product, index) => (
             <div key={ index }>
               <p data-testid="shopping-cart-product-name">
                 {product.title}
@@ -31,6 +61,20 @@ export default class Cart extends Component {
               >
                 {`Quantidade: ${this.funct(product.id)}`}
               </span>
+              <button
+                type="button"
+                data-testid="product-increase-quantity"
+                onClick={ () => this.handleClickIncrease(product) }
+              >
+                Adicionar
+              </button>
+              <button
+                type="button"
+                data-testid="product-decrease-quantity"
+                onClick={ () => this.handleClickDecrease(product) }
+              >
+                Remover
+              </button>
             </div>))
         }
       </div>
