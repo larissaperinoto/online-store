@@ -39,6 +39,22 @@ render() {
       >
         Adicionar ao carrinho
       </button>
+      <form>
+        <input
+          type="email"
+        />
+        <textarea />
+        <input type="radio" name="select" value="1" disabled="true" />
+        <input type="radio" name="select" value="2" checked disabled="true" />
+        <input type="radio" name="select" value="3" disabled="true" />
+        <input type="radio" name="select" value="4" disabled="true" />
+        <input type="radio" name="select" value="5" disabled="true" />
+        <button
+          type="button"
+        >
+          Enviar
+        </button>
+      </form>
     </div>
   );
 }
